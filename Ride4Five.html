@@ -30,7 +30,7 @@
                 console.log(userLon, userLat);
             }
 
-            $.getJSON("https://search.mapzen.com/v1/search?text=1151 William St&api_key=search-8r189wE&boundary.circle.lon=-77.862849&boundary.circle.lat=40.797262&boundary.circle.radius=50", function(data) {
+            $.getJSON("https://search.mapzen.com/v1/search?text=" + val + "&api_key=search-8r189wE&boundary.circle.lon=-77.862849&boundary.circle.lat=40.797262&boundary.circle.radius=50", function(data) {
               console.log(data);
               location(data);
             });
