@@ -10,14 +10,14 @@
             var userLon;
             var pAddress;
             var listIndex = 0;
-            var currentConf = 80;
-            
-            function location(addressJson){
-                while (listIndex < addressJson.length) { 
+            var currentConf = 0.80;
 
+            function location(addressJson) {
+                for (var i = 0; i < addressJson.features.length; i++) {
                     pAddress = addressJson.features[listIndex];
+                    console.log(pAddress);
 
-                    if (pAddress.properties.confidence > currentConf){
+                    if (pAddress.properties.confidence > currentConf) {
 
                         userLat = pAddress.geometry.coordinates[1];
                         userLon = pAddress.geometry.coordinates[0];
@@ -26,15 +26,19 @@
 
                     }
 
-                    listIndex = listIndex + 1;
                 }
+                console.log(userLon, userLat);
             }
-            
-            $.getJSON("https://search.mapzen.com/v1/search?text=1151 William St&api_key=search-8r189wE&boundary.circle.lon=-77.862849&boundary.circle.lat=40.797262&boundary.circle.radius=50", function(data){location(data);});
 
-            alert("address: " + val);
-            alert("address Lat: " + userLat);
-            alert("address Lon: " + userLon);
+            $.getJSON("https://search.mapzen.com/v1/search?text=1151 William St&api_key=search-8r189wE&boundary.circle.lon=-77.862849&boundary.circle.lat=40.797262&boundary.circle.radius=50", function(data) {
+              console.log(data);
+              location(data);
+            });
+
+            //// These lines won't work because they are executed as soon as possible, i.e. before the $.getJSON response callback
+            // alert("address: " + val);
+            // alert("address Lat: " + userLat);
+            // alert("address Lon: " + userLon);
         }
 
     </script>
@@ -42,7 +46,7 @@
 </head>
 
 <body>
-    
+
 <!--<input type="text" id="ad_search_query" style="width:295px">&nbsp; -->
 <input type="button" value="Run Script" class="p-userButton" onClick="eligable('1151 William St');"/>
 
