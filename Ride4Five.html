@@ -4,7 +4,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
     <script>
-    
+
         function eligable(val){
             var isEligable = true;
             var userLat;
@@ -13,21 +13,22 @@
             var myDistance;
             var listIndex;
             var currentConf = 0.80;
-            
+
             function testDistance(distanceJSON) {
-                for (var i = 1; i<distanceJSON.one_to_many.0.length; i++) {
-                    myDistance = distanceJSON.one_to_many.0[i];
+                for (var i = 1; i<distanceJSON.one_to_many["0"].length; i++) {
+                    myDistance = distanceJSON.one_to_many["0"][i];
                     console.log(myDistance);
                     
-                    if (myDistance.one_to_many.distance < 1.5){
-                        isEligable == false;
+                    if (myDistance.distance < 1.5){
+                        isEligable = false;
                     }
                 }
                 console.log(isEligable);
+                document.getElementById("result").textContent = isEligable;
             }
-                
+
             function getDistance(){
-                var distURL = 'https://matrix.mapzen.com/one_to_many?json={"locations":[{"lat":' + userLat + ',"lon":' + userLon + '},{"lat":40.8050003,"lon":-77.8608017},{"lat":40.8070984,"lon":-77.8588028},{"lat":40.8008003,"lon":-77.8647995},{"lat":40.7975998,"lon":-77.8671036},{"lat":40.7919998,"lon":-77.8647995},{"lat":40.7929001,"lon":-77.8674011},{"lat":40.7924004,"lon":-77.8710022},{"lat":40.7905998,"lon":-77.8718033},{"lat":40.7944984,"lon":-77.8613968},{"lat":40.7972984,"lon":-77.8578033},{"lat":40.7989998,"lon":-77.8585968},{"lat":40.8013000,"lon":-77.8588028},{"lat":40.8025017,"lon":-77.8567963},{"lat":40.8050003,"lon":-77.8516998},{"lat":40.8055992,"lon":-77.8486023},{"lat":40.8114014,"lon":-77.8529968},{"lat":40.8101006,"lon":-77.8559036},{"lat":40.8140984,"lon":-77.8555984},{"lat":40.8181992,"lon":-77.8506012},{"lat":40.8288002,"lon":-77.8479996},{"lat":40.8301010,"lon":-77.8448029},{"lat":40.8326988,"lon":-77.8420029},{"lat":40.8185005,"lon":-77.8436966},{"lat":40.8199997,"lon":-77.8453979}],"costing":"pedestrian","units":"mi"}&api_key=matrix-L2KieTU';
+                var distURL = 'https://matrix.mapzen.com/one_to_many?json={"locations":[{"lat":' + userLat + ',"lon":' + userLon + '},{"lat":40.8050003,"lon":-77.8608017},{"lat":40.8070984,"lon":-77.8588028},{"lat":40.8008003,"lon":-77.8647995},{"lat":40.7975998,"lon":-77.8671036},{"lat":40.7919998,"lon":-77.8647995},{"lat":40.7929001,"lon":-77.8674011},{"lat":40.7924004,"lon":-77.8710022},{"lat":40.7905998,"lon":-77.8718033},{"lat":40.7944984,"lon":-77.8613968},{"lat":40.7972984,"lon":-77.8578033},{"lat":40.7989998,"lon":-77.8585968},{"lat":40.8013000,"lon":-77.8588028},{"lat":40.8025017,"lon":-77.8567963},{"lat":40.8050003,"lon":-77.8516998},{"lat":40.8055992,"lon":-77.8486023},{"lat":40.8114014,"lon":-77.8529968},{"lat":40.8101006,"lon":-77.8559036},{"lat":40.8140984,"lon":-77.8555984},{"lat":40.8181992,"lon":-77.8506012},{"lat":40.8288002,"lon":-77.8479996},{"lat":40.8301010,"lon":-77.8448029},{"lat":40.8326988,"lon":-77.8420029},{"lat":40.8185005,"lon":-77.8436966},{"lat":40.8199997,"lon":-77.8453979}],"costing":"pedestrian","units":"mi"}&api_key=matrix-x-Hh9ME';
 
                 $.getJSON(distURL, function(data){
                     console.log(data);
@@ -35,16 +36,14 @@
                 });
             }
 
-             function location(addressJson) {
+            function location(addressJson) {
                 for (var i = 0; i < addressJson.features.length; i++) {
                     myAddress = addressJson.features[i];
                     console.log(myAddress);
 
                     if (myAddress.properties.confidence > currentConf) {
-
                         userLat = myAddress.geometry.coordinates[1];
                         userLon = myAddress.geometry.coordinates[0];
-
                         currentConf = myAddress.properties.condifence;
                     }
                 }
@@ -53,19 +52,10 @@
             }
 
             $.getJSON("https://search.mapzen.com/v1/search?text=" + val + "&api_key=search-8r189wE&boundary.circle.lon=-77.862849&boundary.circle.lat=40.797262&boundary.circle.radius=50", function(data) {
-              console.log(data);
-              location(data);
+                console.log(data);
+                location(data);
             });
-            
 
-            
-            
-            
-
-            //// These lines won't work because they are executed as soon as possible, i.e. before the $.getJSON response callback
-            // alert("address: " + val);
-            // alert("address Lat: " + userLat);
-            // alert("address Lon: " + userLon);
         }
 
     </script>
@@ -74,13 +64,13 @@
 
 <body>
 
-<input type="text" id="ad_search_query" style="width:295px">&nbsp;
-<input type="button" value="Run Script" class="p-userButton" onClick="eligable(document.getElementById('ad_search_query').value);"/>
-
-
-
-
+    <input type="text" id="ad_search_query" style="width:295px">&nbsp;
+    <input type="button" value="Run Script" class="p-userButton" onClick="eligable(document.getElementById('ad_search_query').value);"/>
+    
+    <div id ="Return">
+        <div>
+            Eligibility is: <b> <span id="result"></span> </b>
+        </div>
+    <div/>
 
 </body>
-
-</html>
