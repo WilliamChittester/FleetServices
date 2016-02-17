@@ -19,7 +19,7 @@
                     myDistance = distanceJSON.one_to_many["0"][i];
                     console.log(myDistance);
                     
-                    if (myDistance.distance < 1.5){
+                    if (myDistance.distance < 1.5 && myDistance.distance !== 'null'){
                         isEligable = false;
                     }
                 }
